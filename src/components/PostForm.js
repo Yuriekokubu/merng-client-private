@@ -11,30 +11,27 @@ function PostForm() {
     body: '',
   });
 
-  const [createPost, { loading: load, error }] = useMutation(
-    CREATE_POST_MUTATION,
-    {
-      variables: values,
-      update(proxy, result) {
-        const data = proxy.readQuery({
-          query: FETCH_POSTS_QUERY,
-        });
+  const [createPost, { error, loading }] = useMutation(CREATE_POST_MUTATION, {
+    variables: values,
+    update(proxy, result) {
+      const data = proxy.readQuery({
+        query: FETCH_POSTS_QUERY,
+      });
 
-        let newData = [...data.getPosts];
-        newData = [result.data.createPost, ...newData];
-        proxy.writeQuery({
-          query: FETCH_POSTS_QUERY,
-          data: {
-            ...data,
-            getPosts: {
-              newData,
-            },
+      let newData = [...data.getPosts];
+      newData = [result.data.createPost, ...newData];
+      proxy.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          ...data,
+          getPosts: {
+            newData,
           },
-        });
-        values.body = '';
-      },
-    }
-  );
+        },
+      });
+      values.body = '';
+    },
+  });
 
   function createPostCallback() {
     createPost();
@@ -42,19 +39,20 @@ function PostForm() {
 
   return (
     <>
-      <Form onSubmit={onSubmit}>
-        <h2>Create a post:</h2>
+      <Form onSubmit={onSubmit} style={{ marginBottom: '2rem' }}>
+        <h2>Create a post</h2>
         <Form.Field>
           <Form.Input
-            placeholder="Hi World!"
+            placeholder="ADD POST"
             name="body"
             onChange={onChange}
             value={values.body}
             error={error ? true : false}
           />
           <Button
-            loading={load}
-            basic={load}
+            fluid
+            size={'large'}
+            loading={loading}
             disabled={!values.body.trim()}
             type="submit"
             color="teal"
