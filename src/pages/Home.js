@@ -13,30 +13,28 @@ const Home = (props) => {
   );
 
   return (
-    <Grid columns={3}>
-      <Grid.Row className="page-title">
+    <>
+      <Grid.Row className="page-title" style={{ marginBottom: '3rem' }}>
         <h1>Recent Posts</h1>
       </Grid.Row>
       <Grid.Row>
-        {user && (
-          <Grid.Column>
-            <PostForm />
-          </Grid.Column>
-        )}
+        {user && <PostForm />}
         {loading ? (
           <h1>Loading posts..</h1>
         ) : (
           <Transition.Group>
-            {posts &&
-              posts.map((post) => (
-                <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                  <PostCard post={post} />
-                </Grid.Column>
-              ))}
+            <Grid columns={1}>
+              {posts &&
+                posts.map((post) => (
+                  <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
+                    <PostCard post={post} />
+                  </Grid.Column>
+                ))}
+            </Grid>
           </Transition.Group>
         )}
       </Grid.Row>
-    </Grid>
+    </>
   );
 };
 
